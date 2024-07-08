@@ -1,0 +1,56 @@
+.loginPage_wrapper {
+  margin: auto;
+  background-image: url('../../backgroundImages//loginPage_image.jpg');
+  min-height: 700px;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  padding: 10vh 0;
+}
+.loginPage_wrapper > div:first-child {
+  width: 40%;
+  min-width: 470px;
+  padding: 3%;
+  box-shadow: 0px 0px 1px 3px white;
+  border-radius: 1%;
+  height: 500px;
+}
+
+.form-control {
+  background-color: transparent;
+}
+
+.form-floating label {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+h2 {
+  text-align: center;
+}
+
+.btn {
+  border: none;
+  background-color: #0dcaf0 !important;
+  font-weight: 700;
+  color: black;
+}
+
+input {
+  box-shadow: 0px 0px 1px 1.5px white;
+}
+
+input:focus {
+  box-shadow: none !important;
+  border: none !important;
+}
+
+p {
+  margin: 1rem 0;
+}
+
+p a {
+  color: black;
+  font-size: 1.1rem;
+  font-weight: 700;
+}

@@ -1,0 +1,33 @@
+.container-fluid {
+  background-color: #cbafff;
+  margin: 0px 10px;
+  border-radius: 5px;
+}
+
+.container-fluid > div:first-child {
+  width: 100%;
+}
+
+.me-auto {
+  margin: 0 !important;
+}
+
+.navbar-nav {
+  flex-direction: row;
+}
+
+#navbarSupportedContent ul {
+  width: 100%;
+  justify-content: space-between;
+}
+
+#logout_button {
+  box-shadow: 0px 0px 2px 2px grey;
+  border-radius: 5px;
+  width: fit-content;
+  padding: 5px;
+}
+
+.nav-item {
+  margin: 5px;
+}
