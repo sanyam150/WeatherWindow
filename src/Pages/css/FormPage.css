@@ -1,19 +1,24 @@
-.loginPage_wrapper {
-  margin: auto;
+.loginForm_wrapper {
   background-image: url('../../backgroundImages//loginPage_image.jpg');
+}
+
+.signUpForm_wrapper {
+  background-image: url('../../backgroundImages//SignUpForm_image.jpg');
+}
+
+.formContainer_wrapper {
+  margin: auto;
   min-height: 700px;
   height: 100vh;
   display: flex;
   justify-content: center;
   padding: 10vh 0;
 }
-.loginPage_wrapper > div:first-child {
-  width: 40%;
+.formContainer_wrapper > div:first-child {
   min-width: 470px;
   padding: 3%;
   box-shadow: 0px 0px 1px 3px white;
   border-radius: 1%;
-  height: 500px;
 }
 
 .form-control {
@@ -25,13 +30,13 @@
   font-weight: 700;
 }
 
-h2 {
+h1 {
   text-align: center;
+  letter-spacing: 5px;
 }
 
 .btn {
   border: none;
-  background-color: #0dcaf0 !important;
   font-weight: 700;
   color: black;
 }

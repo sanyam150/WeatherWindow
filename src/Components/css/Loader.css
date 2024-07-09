@@ -1,0 +1,6 @@
+.spinner_wrapper {
+  display: flex;
+  justify-content: center;
+  height: 50vh;
+  align-items: end;
+}

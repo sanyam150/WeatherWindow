@@ -25,3 +25,21 @@ export const isEmailValid = (email) => {
   }
   return true;
 };
+
+export const sleep = (delay) => {
+  return new Promise((resolve) => {
+    setTimeout(resolve, delay * 1000);
+  });
+};
+
+export const resetFields = (stateSetter, fields) => {
+  stateSetter((prevState) => {
+    const newState = { ...prevState };
+    fields.forEach((field) => {
+      if (newState.hasOwnProperty(field)) {
+        newState[field] = '';
+      }
+    });
+    return newState;
+  });
+};

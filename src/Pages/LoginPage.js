@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import './css/LoginPage.css';
+import './css/FormPage.css';
 import {
   handleFormData,
   isFormFieldsEmpty,
@@ -8,13 +8,13 @@ import {
 } from '../utils/pagesUtils';
 import Alert from '../Components/Alert';
 import { ALERT_INFO } from '../constants/constants';
+import { resetFields } from '../utils/pagesUtils';
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const [loginFormData, setLoginFormData] = useState({
     emailId: '',
     password: '',
-    confirmPassword: '',
   });
 
   const [error, setError] = useState({
@@ -23,7 +23,7 @@ const LoginPage = () => {
   });
 
   const handleLogin = () => {
-    const { emailId, password, confirmPassword } = loginFormData;
+    const { emailId, password } = loginFormData;
 
     const { emptyFields } = isFormFieldsEmpty(loginFormData);
     if (emptyFields) {
@@ -40,16 +40,28 @@ const LoginPage = () => {
       setError({ isError: true, message: 'Invalid email address.' });
       return;
     }
-    if (password.length < 6) {
+
+    let registeredUsers =
+      JSON.parse(localStorage.getItem('registeredUsers')) || [];
+
+    const userCredentials = registeredUsers.filter(
+      (user) => user.emailId === emailId
+    );
+
+    if (!userCredentials.length) {
       setError({
         isError: true,
-        message: 'Password must be atleast 6 characters',
+        message: 'Email does not exist. First Sign up',
       });
+      resetFields(setLoginFormData, ['emailId', 'password']);
       return;
     }
 
-    if (password !== confirmPassword) {
-      setError({ isError: true, message: 'Passwords do not match.' });
+    if (password !== userCredentials[0].password) {
+      setError({
+        isError: true,
+        message: 'Incorrect Email Id or Password',
+      });
       return;
     }
 
@@ -60,24 +72,20 @@ const LoginPage = () => {
       JSON.stringify({ email: emailId, password: password })
     );
 
-    setLoginFormData({
-      emailId: '',
-      password: '',
-      confirmPassword: '',
-    });
+    resetFields(setLoginFormData, ['emailId', 'password']);
     navigate('/HomePage');
   };
 
   return (
     <>
-      <div className='loginPage_wrapper'>
+      <div className='formContainer_wrapper loginForm_wrapper'>
         <div>
           <Alert
             message={error.message}
             setError={setError}
             backGroundColor={ALERT_INFO}
           />
-          <h2>Login</h2>
+          <h1>Login</h1>
           <div className='form-floating mb-3'>
             <input
               type='email'
@@ -102,24 +110,11 @@ const LoginPage = () => {
             />
             <label htmlFor='login_password_input'>Password</label>
           </div>
-          <div className='form-floating mb-3'>
-            <input
-              type='password'
-              className='form-control'
-              placeholder='Confirm Password'
-              id='login_confirm_password_input'
-              name='confirmPassword'
-              value={loginFormData.confirmPassword}
-              onChange={(e) => handleFormData(e, setLoginFormData)}
-            />
-            <label htmlFor='login_confirm_password_input'>
-              Confirm Password
-            </label>
-          </div>
+
           <div>
             <button
               type='button'
-              className='btn btn-outline-info'
+              className='btn btn-info'
               onClick={handleLogin}
             >
               Submit
