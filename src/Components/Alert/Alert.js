@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import './css/Alert.css';
+import '../css/Alert.css';
 
 const Alert = ({ message, setError, backGroundColor }) => {
   useEffect(() => {

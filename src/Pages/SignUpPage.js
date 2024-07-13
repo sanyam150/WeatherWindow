@@ -6,7 +6,7 @@ import {
   isFormFieldsEmpty,
   isEmailValid,
 } from '../utils/pagesUtils';
-import Alert from '../Components/Alert';
+import Alert from '../Components/Alert/Alert';
 import { ALERT_DANGER } from '../constants/constants';
 import { sleep } from '../utils/pagesUtils';
 import { resetFields } from '../utils/pagesUtils';
