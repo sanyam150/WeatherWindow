@@ -1,0 +1,76 @@
+.card-wrapper {
+  position: relative;
+}
+
+.card {
+  border-radius: 0.5rem;
+  border: transparent;
+  width: 22rem;
+  z-index: 2;
+  padding: 0rem 1rem 1rem 1rem;
+  box-sizing: content-box;
+}
+
+.weather_logo_wrapper {
+  text-align: center;
+  font-size: 3rem;
+}
+
+.hidden-content {
+  min-height: 3rem;
+  background-color: white;
+  z-index: -1;
+  transition: transform 0.25s ease-in-out;
+  width: 24rem;
+  border-radius: 0 0 0.2rem 0.5rem;
+  padding: 1rem;
+}
+
+.hidden-content.showDescription {
+  transform: translateY(-5%);
+  z-index: 1;
+}
+
+.hidden-content.hideDescription {
+  transform: translateY(-100%);
+}
+
+.arrow_buttons_wrapper {
+  position: relative;
+}
+
+.arrow_button_down,
+.arrow_button_up {
+  font-size: 2rem;
+  cursor: pointer;
+}
+
+.arrow_button_down {
+  position: absolute;
+  opacity: 1;
+  z-index: 1;
+}
+
+.arrow_button_up {
+  position: relative;
+}
+
+.hide_button {
+  opacity: 0;
+  z-index: -1;
+}
+
+svg {
+  margin: 0 0 0 1rem;
+}
+
+.currentWeather_info_table tbody tr td {
+  min-width: 161px;
+  border-style: none;
+}
+
+.weather_row_info_wrapper {
+  display: flex;
+  width: 22rem;
+  justify-content: space-around;
+}

@@ -1,0 +1,41 @@
+.forecast_weather_card_slider {
+  height: 30rem;
+  border-radius: 5px;
+  width: 18rem;
+  overflow: hidden;
+  position: relative;
+}
+
+.forecast_weather_card_slider_track {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  width: 100%;
+  animation: scroll 18s linear infinite;
+}
+
+.forecast_weather_card_slides {
+  background-color: var(--colorWhite);
+  min-height: 13rem;
+  width: 90%;
+  margin: 0rem auto 1rem auto;
+  border-radius: 10px;
+  box-shadow: 0px 0px 1px 1px gray;
+}
+
+.forecast_weather_card_image_wrapper {
+  font-size: 2.5rem;
+  text-align: center;
+}
+.forecast_weather_info_table tbody tr td {
+  border-style: none;
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateY(-50%);
+  }
+  100% {
+    transform: translateY(0%);
+  }
+}
