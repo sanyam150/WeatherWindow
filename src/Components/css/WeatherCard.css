@@ -22,7 +22,7 @@
   z-index: -1;
   transition: transform 0.25s ease-in-out;
   width: 24rem;
-  border-radius: 0 0 0.2rem 0.5rem;
+  border-radius: 0 0 0.5rem 0.5rem;
   padding: 1rem;
 }
 
@@ -60,10 +60,6 @@
   z-index: -1;
 }
 
-svg {
-  margin: 0 0 0 1rem;
-}
-
 .currentWeather_info_table tbody tr td {
   min-width: 161px;
   border-style: none;
@@ -73,4 +69,10 @@ svg {
   display: flex;
   width: 22rem;
   justify-content: space-around;
+}
+
+.weather_row_info_wrapper td {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
 }

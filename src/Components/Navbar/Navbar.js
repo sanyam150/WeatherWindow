@@ -1,34 +1,44 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { fetchCityData } from '../../api/api';
+import { fetchCityData, fetchCurrentWeatherData } from '../../api/api';
 import '../css/Navbar.css';
+import { setPlaceCoordinates } from '../../Redux/Slices/placeCoordinatesSlice';
+import { setCurrentWeather } from '../../Redux/Slices/currentWeatherSlice';
+
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 const Navbar = () => {
+  const dispatch = useDispatch();
+  const queryClient = useQueryClient();
   const [searchTerm, setSearchTerm] = useState('');
   const [results, setResults] = useState([]);
-
   const inputSearchRef = useRef(null);
   const isClicked = useRef(false);
+
+  const userInfo = useSelector((state) => state.userInfo.userInformation);
+  const { latitude, longitude } = useSelector(
+    (state) => state.placeCoordinates
+  );
 
   const handleLogOut = () => {
     localStorage.removeItem('isUserLoggedIn');
     localStorage.removeItem('userProfile');
   };
 
-  const userInfo = useSelector((state) => state.userInfo.userInformation);
-
   const handleSearchInputChange = (e) => {
     isClicked.current = false;
     setSearchTerm(e.target.value);
   };
 
-  const handleSearchFormSubmit = (e) => {
-    e.preventDefault();
-  };
-
-  const handleListItemClick = (cityName, countryName) => {
+  const handleListItemClick = (cityName, countryName, coordinates) => {
     setResults([]);
+    dispatch(
+      setPlaceCoordinates({
+        latitude: coordinates.latitude,
+        longitude: coordinates.longitude,
+      })
+    );
     isClicked.current = true;
     setSearchTerm(`${cityName} (${countryName})`);
     inputSearchRef.current.focus();
@@ -64,11 +74,50 @@ const Navbar = () => {
     }
 
     const debouncedFetchTimeout = setTimeout(async () => {
-      const { data } = await fetchCityData(searchTerm);
-      animateList(data);
+      try {
+        const { data } = await fetchCityData(searchTerm);
+        animateList(data);
+      } catch (error) {
+        console.error('Error fetching city data:', error);
+      }
     }, 1000);
     return () => clearTimeout(debouncedFetchTimeout);
   }, [searchTerm]);
+
+  const { data, refetch } = useQuery({
+    queryKey: ['currentWeather', { latitude, longitude }],
+    queryFn: ({ queryKey }) => {
+      const [, { latitude, longitude }] = queryKey;
+      return fetchCurrentWeatherData({ latitude, longitude });
+    },
+    enabled: false,
+    staleTime: 600000,
+    cacheTime: 900000,
+  });
+
+  const handleSearchFormSubmit = (e) => {
+    e.preventDefault();
+    if (latitude !== null && longitude !== null) {
+      const existingData = queryClient.getQueryData([
+        'currentWeather',
+        { latitude, longitude },
+      ]);
+      if (existingData) {
+        console.log('Using cached data:', existingData);
+      } else {
+        refetch();
+        dispatch(setCurrentWeather(data));
+      }
+    } else {
+      console.warn('Latitude and/or longitude is null, cannot fetch data.');
+    }
+  };
+
+  useEffect(() => {
+    if (data) {
+      dispatch(setCurrentWeather(data.data));
+    }
+  }, [data, dispatch]);
 
   return (
     <div className='navbar_wrapper'>
@@ -113,7 +162,7 @@ const Navbar = () => {
             <form
               className='d-flex navbar_form_wrapper'
               role='search'
-              onClick={handleSearchFormSubmit}
+              onSubmit={handleSearchFormSubmit}
             >
               <input
                 ref={inputSearchRef}
@@ -124,7 +173,11 @@ const Navbar = () => {
                 value={searchTerm}
                 onChange={handleSearchInputChange}
               />
-              <button className='btn navbar_search_button' type='submit'>
+              <button
+                className='btn navbar_search_button'
+                type='submit'
+                disabled={results.length !== 0}
+              >
                 Search
               </button>
               {results && results.length > 0 && (
@@ -139,7 +192,11 @@ const Navbar = () => {
                         onClick={() =>
                           handleListItemClick(
                             result.item.name,
-                            result.item.country
+                            result.item.country,
+                            {
+                              latitude: result.item.lat,
+                              longitude: result.item.lon,
+                            }
                           )
                         }
                         style={{ cursor: 'pointer' }}

@@ -1,17 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import '../css/ToggleButton.css';
+import { setTemperatureScale } from '../../Redux/Slices/temperatureScaleSlice';
 
-const ToggleButton = ({ parent_wrapper_width = '150' }) => {
+const ToggleButton = ({
+  parent_wrapper_width = '150',
+  parent_wrapper_height = '60',
+}) => {
   const [selectedValue, setSelectedValue] = useState('degree_Celcius');
   const handleChange = (event) => {
     setSelectedValue(event.target.value);
   };
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(setTemperatureScale(selectedValue));
+  }, [selectedValue, dispatch]);
 
   return (
     <div
       className='toggle_button_parent_wrapper'
       style={{
         width: `${parent_wrapper_width}px`,
+        height: `${parent_wrapper_height}px`,
       }}
     >
       <div className='toggle_button_wrapper'>

@@ -1,6 +1,8 @@
 import { HiSun } from 'react-icons/hi';
-import { IoRainySharp } from 'react-icons/io5';
+import { IoRainySharp, IoPartlySunnySharp } from 'react-icons/io5';
 import { FaCloud } from 'react-icons/fa';
+import { PiCloudFogDuotone } from 'react-icons/pi';
+import { TbHaze } from 'react-icons/tb';
 
 export const handleFormData = (e, setFormData) => {
   const { name, value } = e.target;
@@ -61,6 +63,12 @@ export const setCardColorTheme = (weather_type) => {
       return getCSSVariable('--colorCard_Rain');
     case 'clouds':
       return getCSSVariable('--colorNavbarBackgroundLight_1');
+    case 'mist':
+      return getCSSVariable('--color_mist_1');
+    case 'haze':
+      return getCSSVariable('--color_haze_1');
+    case 'clear':
+      return getCSSVariable('--color_clear_1');
     default:
       return getCSSVariable('--colorToggleButton');
   }
@@ -93,7 +101,29 @@ export const weatherImage = (weatherType, colorTheme) => {
       );
     case 'clear':
       return (
-        <HiSun
+        <IoPartlySunnySharp
+          style={{
+            boxShadow: `0px 0px 7px -1px ${colorTheme}`,
+            color: colorTheme,
+            padding: '5px',
+            borderRadius: '8px',
+          }}
+        />
+      );
+    case 'mist':
+      return (
+        <PiCloudFogDuotone
+          style={{
+            boxShadow: `0px 0px 7px -1px ${colorTheme}`,
+            color: colorTheme,
+            padding: '5px',
+            borderRadius: '8px',
+          }}
+        />
+      );
+    case 'haze':
+      return (
+        <TbHaze
           style={{
             boxShadow: `0px 0px 7px -1px ${colorTheme}`,
             color: colorTheme,
@@ -131,4 +161,14 @@ export const timeData = (timeStamp) => {
   });
 
   return { day, dayOfMonth, month, year, time };
+};
+
+export const temperatureConversion = (tempType, tempData) => {
+  let updatedTemp;
+  if (tempType === 'degree_Celcius') {
+    updatedTemp = tempData - 273;
+  } else {
+    updatedTemp = (9 / 5) * (tempData - 273) + 32;
+  }
+  return updatedTemp.toFixed(2);
 };

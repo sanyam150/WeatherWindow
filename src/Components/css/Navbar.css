@@ -42,6 +42,7 @@ form input {
 .navbar_list_form_wrapper ul {
   position: relative !important;
   width: 207px !important;
+  z-index: 1;
 }
 
 .navbar_list_form_wrapper ul li {
