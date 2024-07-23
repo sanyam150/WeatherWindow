@@ -11,9 +11,13 @@ const forecastWeatherSlice = createSlice({
     setForecastWeather: (state, action) => {
       state.forecastWeatherData = action.payload;
     },
+    resetForecastWeather: (state) => {
+      state.forecastWeatherData = null;
+    },
   },
 });
 
-export const { setForecastWeather } = forecastWeatherSlice.actions;
+export const { setForecastWeather, resetForecastWeather } =
+  forecastWeatherSlice.actions;
 
 export default forecastWeatherSlice.reducer;

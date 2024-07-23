@@ -7,9 +7,19 @@ import {
   fetchForeCastWeatherData,
 } from '../../api/api';
 import '../css/Navbar.css';
-import { setPlaceCoordinates } from '../../Redux/Slices/placeCoordinatesSlice';
-import { setCurrentWeather } from '../../Redux/Slices/currentWeatherSlice';
-import { setForecastWeather } from '../../Redux/Slices/forecastWeatherSlice';
+import {
+  setPlaceCoordinates,
+  resetPlaceCoordinates,
+} from '../../Redux/Slices/placeCoordinatesSlice';
+import {
+  setCurrentWeather,
+  resetCurrentWeather,
+} from '../../Redux/Slices/currentWeatherSlice';
+import {
+  setForecastWeather,
+  resetForecastWeather,
+} from '../../Redux/Slices/forecastWeatherSlice';
+import { resetLoggedIn } from '../../Redux/Slices/userLoginSlice';
 
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
@@ -29,6 +39,10 @@ const Navbar = () => {
   const handleLogOut = () => {
     localStorage.removeItem('isUserLoggedIn');
     localStorage.removeItem('userProfile');
+    dispatch(resetForecastWeather());
+    dispatch(resetPlaceCoordinates());
+    dispatch(resetCurrentWeather());
+    dispatch(resetLoggedIn());
   };
 
   const handleSearchInputChange = (e) => {

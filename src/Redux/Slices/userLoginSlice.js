@@ -14,8 +14,13 @@ const userLoggedInInformationSlice = createSlice({
       state.userInformation = userInformation;
       state.isLoading = isLoading;
     },
+    resetLoggedIn: (state) => {
+      state.isUserLoggedIn = false;
+      state.userInformation = {};
+      state.isLoading = false;
+    },
   },
 });
 
-export const { loggedIn } = userLoggedInInformationSlice.actions;
+export const { loggedIn, resetLoggedIn } = userLoggedInInformationSlice.actions;
 export default userLoggedInInformationSlice.reducer;

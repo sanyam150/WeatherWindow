@@ -13,9 +13,14 @@ const placeCoordinatesSlice = createSlice({
       state.latitude = action.payload.latitude;
       state.longitude = action.payload.longitude;
     },
+    resetPlaceCoordinates: (state) => {
+      state.latitude = null;
+      state.longitude = null;
+    },
   },
 });
 
-export const { setPlaceCoordinates } = placeCoordinatesSlice.actions;
+export const { setPlaceCoordinates, resetPlaceCoordinates } =
+  placeCoordinatesSlice.actions;
 
 export default placeCoordinatesSlice.reducer;
