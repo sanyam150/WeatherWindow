@@ -1,7 +1,10 @@
 import React, { useEffect } from 'react';
-import Navbar from '../Components/Navbar';
+import Navbar from '../Components/Navbar/Navbar';
 import { useDispatch } from 'react-redux';
 import { loggedIn } from '../Redux/Slices/userLoginSlice';
+import WeatherCard from '../Components/WeatherCard/WeatherCard';
+import ForecastWeatherCard from '../Components/WeatherCard/ForecastWeatherCard';
+import './css/HomePage.css';
 
 export const HomePage = () => {
   const dispatch = useDispatch();
@@ -25,8 +28,24 @@ export const HomePage = () => {
   }, [dispatch]);
 
   return (
-    <div>
+    <>
       <Navbar />
-    </div>
+      <div className='homePage_wrapper'>
+        <div className='homePage_wrapper_container'>
+          <div className='current_weather_wrapper'>
+            <div className='current_weather_heading_wrapper'>
+              Current Weather
+            </div>
+            <WeatherCard />
+          </div>
+          <div className='forecast_weather_wrapper'>
+            <div className='forecast_weather_heading_wrapper'>
+              ForeCast Weather
+            </div>
+            <ForecastWeatherCard />
+          </div>
+        </div>
+      </div>
+    </>
   );
 };

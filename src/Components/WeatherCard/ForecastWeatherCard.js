@@ -1,14 +1,20 @@
 import React, { useEffect, useRef } from 'react';
+import { useSelector } from 'react-redux';
 import '../css/ForecastWeatherCard.css';
 import {
   weatherImage,
   setCardColorTheme,
   timeData,
 } from '../../utils/pagesUtils';
+import { temperatureConversion } from '../../utils/pagesUtils';
 
-const ForecastWeatherCard = (props) => {
-  const { forecastData } = props;
+const ForecastWeatherCard = () => {
   const sliderRef = useRef(null);
+
+  const temperatureScale = useSelector((state) => state.temperatureScale.scale);
+  const forecastData = useSelector(
+    (state) => state.forecastWeatherInformation.forecastWeatherData
+  );
 
   useEffect(() => {
     const slider = sliderRef.current;
@@ -19,13 +25,17 @@ const ForecastWeatherCard = (props) => {
     const handleMouseLeave = () => {
       slider.style.animationPlayState = 'running';
     };
-
-    slider.addEventListener('mouseenter', handleMouseEnter);
-    slider.addEventListener('mouseleave', handleMouseLeave);
+    if (slider) {
+      slider.addEventListener('mouseenter', handleMouseEnter);
+      slider.addEventListener('mouseleave', handleMouseLeave);
+    }
 
     return () => {
-      slider.removeEventListener('mouseenter', handleMouseEnter);
-      slider.removeEventListener('mouseleave', handleMouseLeave);
+      if (slider) {
+        slider.removeEventListener('mouseenter', handleMouseEnter);
+
+        slider.removeEventListener('mouseleave', handleMouseLeave);
+      }
     };
   }, []);
 
@@ -51,11 +61,15 @@ const ForecastWeatherCard = (props) => {
     );
   };
 
+  const displayedForecastData =
+    forecastData && forecastData.length && forecastData.slice(0, 5);
+
   return (
-    <div className='forecast_weather_card_slider'>
-      <div className='forecast_weather_card_slider_track' ref={sliderRef}>
-        {forecastData.length > 0 &&
-          forecastData.map((element, index) => (
+    displayedForecastData &&
+    displayedForecastData.length > 0 && (
+      <div className='forecast_weather_card_slider'>
+        <div className='forecast_weather_card_slider_track' ref={sliderRef}>
+          {displayedForecastData.map((element, index) => (
             <div
               className='forecast_weather_card_slides'
               key={`element${index}`}
@@ -77,13 +91,23 @@ const ForecastWeatherCard = (props) => {
                       <td>
                         <strong>Max Temp (°C)</strong>
                       </td>
-                      <td>{(element.main.temp_max - 273).toFixed(2)}</td>
+                      <td>
+                        {temperatureConversion(
+                          temperatureScale,
+                          element.main.temp_max
+                        )}
+                      </td>
                     </tr>
                     <tr>
                       <td>
                         <strong>Min Temp (°C)</strong>
                       </td>
-                      <td>{(element.main.temp_min - 273).toFixed(2)}</td>
+                      <td>
+                        {temperatureConversion(
+                          temperatureScale,
+                          element.main.temp_min
+                        )}
+                      </td>
                     </tr>
                     <tr>
                       <td>
@@ -96,8 +120,7 @@ const ForecastWeatherCard = (props) => {
               </div>
             </div>
           ))}
-        {forecastData.length > 0 &&
-          forecastData.map((element, index) => (
+          {displayedForecastData.map((element, index) => (
             <div
               className='forecast_weather_card_slides'
               key={`element$_${index}`}
@@ -119,13 +142,23 @@ const ForecastWeatherCard = (props) => {
                       <td>
                         <strong>Max Temp (°C)</strong>
                       </td>
-                      <td>{(element.main.temp_max - 273).toFixed(2)}</td>
+                      <td>
+                        {temperatureConversion(
+                          temperatureScale,
+                          element.main.temp_max
+                        )}
+                      </td>
                     </tr>
                     <tr>
                       <td>
                         <strong>Min Temp (°C)</strong>
                       </td>
-                      <td>{(element.main.temp_min - 273).toFixed(2)}</td>
+                      <td>
+                        {temperatureConversion(
+                          temperatureScale,
+                          element.main.temp_min
+                        )}
+                      </td>
                     </tr>
                     <tr>
                       <td>
@@ -138,8 +171,9 @@ const ForecastWeatherCard = (props) => {
               </div>
             </div>
           ))}
+        </div>
       </div>
-    </div>
+    )
   );
 };
 

@@ -1,10 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { fetchCityData, fetchCurrentWeatherData } from '../../api/api';
+import {
+  fetchCityData,
+  fetchCurrentWeatherData,
+  fetchForeCastWeatherData,
+} from '../../api/api';
 import '../css/Navbar.css';
 import { setPlaceCoordinates } from '../../Redux/Slices/placeCoordinatesSlice';
 import { setCurrentWeather } from '../../Redux/Slices/currentWeatherSlice';
+import { setForecastWeather } from '../../Redux/Slices/forecastWeatherSlice';
 
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
@@ -84,29 +89,51 @@ const Navbar = () => {
     return () => clearTimeout(debouncedFetchTimeout);
   }, [searchTerm]);
 
-  const { data, refetch } = useQuery({
-    queryKey: ['currentWeather', { latitude, longitude }],
-    queryFn: ({ queryKey }) => {
-      const [, { latitude, longitude }] = queryKey;
-      return fetchCurrentWeatherData({ latitude, longitude });
-    },
-    enabled: false,
-    staleTime: 600000,
-    cacheTime: 900000,
-  });
+  const { data: currentWeatherData, refetch: refetchCurrentWeather } = useQuery(
+    {
+      queryKey: ['currentWeather', { latitude, longitude }],
+      queryFn: ({ queryKey }) => {
+        const [, { latitude, longitude }] = queryKey;
+        return fetchCurrentWeatherData({ latitude, longitude });
+      },
+      enabled: false,
+      staleTime: 600000,
+      cacheTime: 900000,
+    }
+  );
+
+  const { data: forecastWeatherData, refetch: refetchForecastWeather } =
+    useQuery({
+      queryKey: ['forecastWeather', { latitude, longitude }],
+      queryFn: ({ queryKey }) => {
+        const [, { latitude, longitude }] = queryKey;
+        return fetchForeCastWeatherData({ latitude, longitude });
+      },
+      enabled: false,
+      staleTime: 600000,
+      cacheTime: 900000,
+    });
 
   const handleSearchFormSubmit = (e) => {
     e.preventDefault();
     if (latitude !== null && longitude !== null) {
-      const existingData = queryClient.getQueryData([
+      const existingCurrentWeatherData = queryClient.getQueryData([
         'currentWeather',
         { latitude, longitude },
       ]);
-      if (existingData) {
-        console.log('Using cached data:', existingData);
+      const existingForecastWeatherData = queryClient.getQueryData([
+        'forecastWeather',
+        { latitude, longitude },
+      ]);
+      if (existingCurrentWeatherData && existingForecastWeatherData) {
+        console.log(
+          'Using cached data:',
+          existingCurrentWeatherData,
+          existingForecastWeatherData
+        );
       } else {
-        refetch();
-        dispatch(setCurrentWeather(data));
+        refetchCurrentWeather();
+        refetchForecastWeather();
       }
     } else {
       console.warn('Latitude and/or longitude is null, cannot fetch data.');
@@ -114,10 +141,13 @@ const Navbar = () => {
   };
 
   useEffect(() => {
-    if (data) {
-      dispatch(setCurrentWeather(data.data));
+    if (currentWeatherData) {
+      dispatch(setCurrentWeather(currentWeatherData.data));
     }
-  }, [data, dispatch]);
+    if (forecastWeatherData) {
+      dispatch(setForecastWeather(forecastWeatherData.data.list));
+    }
+  }, [currentWeatherData, forecastWeatherData, dispatch]);
 
   return (
     <div className='navbar_wrapper'>
