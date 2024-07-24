@@ -3,6 +3,11 @@ import { IoRainySharp, IoPartlySunnySharp } from 'react-icons/io5';
 import { FaCloud } from 'react-icons/fa';
 import { PiCloudFogDuotone } from 'react-icons/pi';
 import { TbHaze } from 'react-icons/tb';
+import rainImage from '../backgroundImages/rainy_day_image.jpg';
+import cloudImage from '../backgroundImages/cloudy_weather_image.jpg';
+import clearWeatherImage from '../backgroundImages/clear_weather_image.jpg';
+import hazeWeatherImage from '../backgroundImages/haze_weather_image.jpg';
+import sunnyDayImage from '../backgroundImages/sunnyDay_image.jpg';
 
 export const handleFormData = (e, setFormData) => {
   const { name, value } = e.target;
@@ -171,4 +176,23 @@ export const temperatureConversion = (tempType, tempData) => {
     updatedTemp = (9 / 5) * (tempData - 273) + 32;
   }
   return updatedTemp.toFixed(2);
+};
+
+export const setHomePageBackground = (data) => {
+  let { main } = data;
+  main = main.toLowerCase();
+  switch (main) {
+    case 'mist':
+      return hazeWeatherImage;
+    case 'rain':
+      return rainImage;
+    case 'clouds':
+      return cloudImage;
+    case 'haze':
+      return hazeWeatherImage;
+    case 'clear':
+      return clearWeatherImage;
+    default:
+      return sunnyDayImage;
+  }
 };

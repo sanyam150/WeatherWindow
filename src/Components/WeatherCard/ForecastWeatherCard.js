@@ -37,7 +37,7 @@ const ForecastWeatherCard = () => {
         slider.removeEventListener('mouseleave', handleMouseLeave);
       }
     };
-  }, []);
+  }, [forecastData]);
 
   const setColorThemeImage = (weatherData) => {
     const { main } = weatherData[0];

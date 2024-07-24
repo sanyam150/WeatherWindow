@@ -50,19 +50,6 @@ const Navbar = () => {
     setSearchTerm(e.target.value);
   };
 
-  const handleListItemClick = (cityName, countryName, coordinates) => {
-    setResults([]);
-    dispatch(
-      setPlaceCoordinates({
-        latitude: coordinates.latitude,
-        longitude: coordinates.longitude,
-      })
-    );
-    isClicked.current = true;
-    setSearchTerm(`${cityName} (${countryName})`);
-    inputSearchRef.current.focus();
-  };
-
   const animateList = (listData) => {
     let currentIndex = 0;
     let listArray = [];
@@ -128,6 +115,31 @@ const Navbar = () => {
       cacheTime: 900000,
     });
 
+  const handleListItemClick = async (cityName, countryName, coordinates) => {
+    setResults([]);
+    dispatch(
+      setPlaceCoordinates({
+        latitude: coordinates.latitude,
+        longitude: coordinates.longitude,
+      })
+    );
+
+    isClicked.current = true;
+    setSearchTerm(`${cityName} (${countryName})`);
+    inputSearchRef.current.focus();
+
+    await queryClient.invalidateQueries([
+      'currentWeather',
+      { latitude: coordinates.latitude, longitude: coordinates.longitude },
+    ]);
+    await queryClient.invalidateQueries([
+      'forecastWeather',
+      { latitude: coordinates.latitude, longitude: coordinates.longitude },
+    ]);
+    dispatch(resetCurrentWeather());
+    dispatch(resetForecastWeather());
+  };
+
   const handleSearchFormSubmit = (e) => {
     e.preventDefault();
     if (latitude !== null && longitude !== null) {
@@ -145,6 +157,8 @@ const Navbar = () => {
           existingCurrentWeatherData,
           existingForecastWeatherData
         );
+        dispatch(setCurrentWeather(currentWeatherData.data));
+        dispatch(setForecastWeather(forecastWeatherData.data.list));
       } else {
         refetchCurrentWeather();
         refetchForecastWeather();
