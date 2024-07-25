@@ -71,3 +71,23 @@ Bootstrap: Enhances CSS writing efficiency.
 6. Then run the application by `npm run start`
 
 # Screenshots :
+
+1. Signup Page
+   
+   ![weather_window_1](https://github.com/user-attachments/assets/c1a6ff1a-e2b5-4340-8e7e-0244e48b260d)
+
+2. Login Page
+   
+![weather_window_2](https://github.com/user-attachments/assets/b0e471d7-411b-477b-9ecf-fbf45536820a)
+
+3. Home Page
+
+![weather_window_3](https://github.com/user-attachments/assets/3518ae3e-23b0-47b9-801a-920f68305685)
+
+   ![weather_window_4](https://github.com/user-attachments/assets/29f74b0c-1f59-44e0-9b24-d6e9226fb667)
+
+![weather_window_5](https://github.com/user-attachments/assets/a4a41114-fad4-4f09-9548-47d934ae2a62)
+
+![weather_window_6](https://github.com/user-attachments/assets/685f1e3b-a995-4e7e-b303-dee8f6828cfa)
+
+
